@@ -5,7 +5,6 @@ import { hexToRGBA } from './misc'
 import style from './style.scss'
 
 class LoginPrompt extends Component {
-
   constructor(props) {
     super(props)
     this.state = {
@@ -36,37 +35,50 @@ class LoginPrompt extends Component {
     const usernameLineColor = hexToRGBA(this.props.bgColor, 0.07)
     const passwordLineColor = hexToRGBA(this.props.bgColor, 0.07)
 
-    return <form className={style.loginPromptContainer} onSubmit={::this.handleSubmit}>
-      <label>
+    return (
+      <form className={style.loginPromptContainer} onSubmit={::this.handleSubmit}>
+        <label>
+          <input
+            style={{ 'border-bottom-color': usernameLineColor, color: fieldTextColor }}
+            className={style.loginInput}
+            type="input"
+            placeholder="Username"
+            onChange={::this.handleChange('username')}
+          />
+        </label>
+        <label>
+          <input
+            style={{ 'border-bottom-color': passwordLineColor, color: fieldTextColor }}
+            className={style.loginInput}
+            type="password"
+            placeholder="Password"
+            onChange={::this.handleChange('password')}
+          />
+        </label>
         <input
-          style={{ 'border-bottom-color': usernameLineColor, color: fieldTextColor }}
-          className={style.loginInput}
-          type='input' 
-          placeholder='Username' 
-          onChange={::this.handleChange('username')}/>
-      </label>
-      <label>
-        <input
-          style={{ 'border-bottom-color': passwordLineColor, color: fieldTextColor }}
-          className={style.loginInput}
-          type='password'
-          placeholder='Password'
-          onChange={::this.handleChange('password')}/>
-      </label>
-      <input
-      style={{ 'background-color': buttonBackgroundColor, color: buttonTextColor }}
-      className={style.loginButton}
-      type="submit"
-      value="Submit" />
-    </form>
+          style={{ 'background-color': buttonBackgroundColor, color: buttonTextColor }}
+          className={style.loginButton}
+          type="submit"
+          value="Submit"
+        />
+      </form>
+    )
   }
 
   render_bot_past() {
-    return <div className={style.specialAction}><p>* Login form *</p></div>
+    return (
+      <div className={style.specialAction}>
+        <p>* Login form *</p>
+      </div>
+    )
   }
 
   render_user() {
-    return <div className={style.specialAction}><p>* Provided credentials *</p></div>
+    return (
+      <div className={style.specialAction}>
+        <p>* Provided credentials *</p>
+      </div>
+    )
   }
 
   render() {

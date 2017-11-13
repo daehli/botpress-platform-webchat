@@ -136,7 +136,7 @@ recipientAddress:
   - text: Please enter your address
     location_picker:
       id: map_example
-      search_placeholder: Please type your address here:
+      search_placeholder: Please type your address here
       title: Address confirmation
       button_title: ⚐ Send location
       default_location: [-30.123, 20.123]
@@ -157,7 +157,7 @@ Also, `default_location` parameter is not required, then browser request user lo
 
 At next you can get a user response via usually getting the form, for example:
 ```js
-    bp.hear({ type: 'form', formId: 'map1' }, (event, next) => {
+    bp.hear({ type: 'location_picker', formId: 'map_example' }, (event, next) => {
         console.log(event.places);
         event.reply('#rpl');
     });
@@ -170,10 +170,10 @@ In the ```event.places``` we getting the array of the places from google-maps AP
 We are still working on other type of messages to increase the power of this module. Botpress is a community effort, so **Pull Requests are welcomed**.
 
 - Caroussel **(soon)**
-- Image **(soon)**
-- Video **(soon)**
-- Audio **(soon)**
-- Location Picker **(soon)**
+- Image 
+- Video 
+- Audio
+- Location Picker
 - Web Widgets **(soon)**
 
 ## Supported views
