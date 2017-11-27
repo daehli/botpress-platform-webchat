@@ -1,16 +1,20 @@
 import sillyname from 'sillyname'
 
 module.exports = async (bp, config) => {
-
   const knex = await bp.db.get()
 
   async function getOrCreateUser(userId, throwIfNotFound = false) {
     const realUserId = userId.startsWith('web:') ? userId.substr(4) : userId
-    
-    const user = await knex('users').where({
-      platform: 'webchat',
-      userId: realUserId
-    }).then().get(0).then()
+
+    // TODO Humain in the loop response
+    const user = await knex('users')
+      .where({
+        platform: 'webchat',
+        userId: realUserId
+      })
+      .then()
+      .get(0)
+      .then()
 
     if (!user) {
       if (throwIfNotFound) {
@@ -37,9 +41,7 @@ module.exports = async (bp, config) => {
     return bp.db.saveUser(user)
   }
 
-  async function patchUserInfo(userId, fields) {
-    
-  }
+  async function patchUserInfo(userId, fields) {}
 
   return { getOrCreateUser }
 }

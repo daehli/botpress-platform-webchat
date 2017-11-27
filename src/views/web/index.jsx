@@ -205,6 +205,7 @@ export default class Web extends React.Component {
   }
 
   handleNewMessage(event) {
+    console.log('HANDLENEWMESSAGE')
     this.safeUpdateCurrentConvo(event.conversationId, true, convo => {
       return Object.assign({}, convo, {
         messages: [...convo.messages, event],

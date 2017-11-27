@@ -23,7 +23,6 @@ const createConfigFile = bp => {
 }
 
 module.exports = {
-
   config: {
     locale: { type: 'string', required: false, default: 'en-US' },
 
@@ -34,7 +33,7 @@ module.exports = {
 
     welcomeMsgEnable: { type: 'bool', required: false, default: false },
     welcomeMsgDelay: { type: 'any', required: false, default: 5000 },
-    welcomeMsgText: { type: 'string', required: false, default: ''},
+    welcomeMsgText: { type: 'string', required: false, default: '' },
 
     backgroundColor: { type: 'string', required: false, default: '#000000' },
     textColorOnBackground: { type: 'string', required: false, default: '#666666' },

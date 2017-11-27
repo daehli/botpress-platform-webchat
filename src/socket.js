@@ -7,15 +7,11 @@ import db from './db'
 const outgoingTypes = ['text', 'login_prompt']
 
 module.exports = async (bp, config) => {
-
   const knex = await bp.db.get()
   const { appendBotMessage, getOrCreateRecentConversation } = db(knex, bp.botfile)
   const { getOrCreateUser } = await users(bp, config)
 
-  const {
-    bot_name = 'Bot',
-    bot_avatar = null
-  } = config || {}
+  const { bot_name = 'Bot', bot_avatar = null } = config || {}
 
   bp.middlewares.register({
     name: 'webchat.sendMessages',
@@ -23,8 +19,9 @@ module.exports = async (bp, config) => {
     order: 100,
     handler: outgoingHandler,
     module: 'botpress-platform-webchat',
-    description: 'Sends out messages that targets platform = webchat.' +
-    ' This middleware should be placed at the end as it swallows events once sent.'
+    description:
+      'Sends out messages that targets platform = webchat.' +
+      ' This middleware should be placed at the end as it swallows events once sent.'
   })
 
   async function outgoingHandler(event, next) {
@@ -35,19 +32,17 @@ module.exports = async (bp, config) => {
     if (!_.includes(outgoingTypes, event.type)) {
       return next('Unsupported event type: ' + event.type)
     }
-    
     let user = await getOrCreateUser(event.user.id)
-
     const typing = parseTyping(event)
 
-    const conversationId = _.get(event, 'raw.conversationId')
-      || await getOrCreateRecentConversation(user.id)
+    const conversationId = _.get(event, 'raw.conversationId') || (await getOrCreateRecentConversation(user.id))
 
+    bp.logger.debug('[CONVERSATIONID]::::: ' + conversationId)
     const socketId = user.userId.replace('webchat:', '')
 
     if (typing) {
-      bp.events.emit('guest.webchat.typing', { 
-        timeInMs: typing, 
+      bp.events.emit('guest.webchat.typing', {
+        timeInMs: typing,
         userId: null,
         __room: 'visitor:' + socketId,
         conversationId
@@ -56,12 +51,19 @@ module.exports = async (bp, config) => {
       await Promise.delay(typing)
     }
 
+    if (event.raw.conversationId != conversationId) {
+      // Humain in the loop Process
+      // TODO
+      _.set(event, 'raw.conversationId', conversationId)
+    }
+
     const message = await appendBotMessage(bot_name, bot_avatar, conversationId, event)
 
     Object.assign(message, {
       __room: 'visitor:' + socketId // This is used to send to the relevant user's socket
     })
 
+    console.log('MESSAGE:::::::: ', message)
     bp.events.emit('guest.webchat.message', message)
 
     // Resolve the event promise
